@@ -1,0 +1,7 @@
+{
+    email <gustavo.lichti@oititec.com.br>
+}
+
+filetransfer.oiti.zone {
+    reverse_proxy http://filestash:8334
+}

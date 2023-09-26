@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  caddy:
+    image: caddy
+    restart: always
+    ports: 
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/data/:/data/
+      - ./caddy/config/:/config/
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+
+  filestash:
+    image: machines/filestash
+    restart: always
+    environment:
+      - APPLICATION_URL=[[DOMAIN]]
+    ports:
+      - "8334:8334"
+
+  sftp-cliente-a:
+      build:
+        context: ./sftp-docker/docker
+        args:
+          SSH_MASTER_USER: cliente-a
+          SSH_MASTER_PASS: cliente-a123
+      restart: always
+      hostname: cliente-a.filetransfer
+      volumes:
+        - ./data/cliente-a:/data
+
+  sftp-cliente-b:
+      build:
+        context: ./sftp-docker/docker
+        args:
+          SSH_MASTER_USER: cliente-b
+          SSH_MASTER_PASS: cliente-b123
+      restart: always
+      hostname: cliente-b.filetransfer
+      volumes:
+        - ./data/cliente-b:/data
+
+
